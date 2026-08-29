@@ -44,7 +44,7 @@ export default function Hero() {
           transition={{ duration: 0.5, delay: 0.1, ease }}
           className="mt-6 max-w-[480px] text-base text-muted-foreground md:text-lg"
         >
-          Chat, hang out, and grow with your people.
+          Chat, hang out, and grow with your friends and family.
         </motion.p>
 
         <motion.div

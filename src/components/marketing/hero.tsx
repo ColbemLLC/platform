@@ -24,7 +24,7 @@ export default function Hero() {
       */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-background via-background/95 to-background" />
 
-      <div className="relative z-10 mt-auto flex flex-col px-6 pb-20 md:px-12 lg:pb-24">
+      <div className="relative z-10 mt-auto mx-auto w-full max-w-7xl flex flex-col px-6 pb-20 lg:px-12 lg:pb-24">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -64,7 +64,7 @@ export default function Hero() {
             variant="outline"
             className="h-12 rounded-lg border-border bg-background/80 px-7 text-sm font-semibold text-foreground hover:bg-muted"
           >
-            <Link href="/signup">Create account</Link>
+            <Link href="/register">Create account</Link>
           </Button>
         </motion.div>
       </div>

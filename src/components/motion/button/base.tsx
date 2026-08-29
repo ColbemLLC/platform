@@ -14,9 +14,9 @@ import {
   useRef,
   useState,
 } from "react";
-import { EASE_OUT, SPRING_PRESS } from "@/src/lib/ease";
-import { useHoverCapable } from "@/src/hooks/use-hover-capable";
-import { cn } from "@/src/lib/utils";
+import { EASE_OUT, SPRING_PRESS } from "@/lib/ease";
+import { useHoverCapable } from "@/hooks/use-hover-capable";
+import { cn } from "@/lib/utils";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "outline";
 export type ButtonSize = "sm" | "md" | "lg" | "icon";

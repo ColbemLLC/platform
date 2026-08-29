@@ -15,7 +15,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { EASE_OUT, SPRING_SWAP } from "@/src/lib/ease";
+import { EASE_OUT, SPRING_SWAP } from "@/lib/ease";
 import { Button, type ButtonProps } from "./base";
 
 export type ButtonState = "idle" | "loading" | "success" | "error";

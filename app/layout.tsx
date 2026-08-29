@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Roboto } from "next/font/google";
+import { Geist, Geist_Mono, Roboto, Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/src/lib/utils";
-import { ColorModeProvider } from "@/src/components/theme/color-mode-provider";
+import { cn } from "@/lib/utils";
+import { ColorModeProvider } from "@/components/theme/color-mode-provider";
 
-const roboto = Roboto({ subsets: ['latin'], variable: '--font-sans' });
+const roboto = Roboto({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,16 +16,42 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Colbe",
-  description: "A community and chat platform to build, hang out, and grow with your people.",
+  description:
+    "A community and chat platform to build, hang out, and grow with your people.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={cn("dark", "h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", roboto.variable)}
+      className={cn(
+        "dark",
+        "h-full",
+        "antialiased",
+        geistSans.variable,
+        geistMono.variable,
+        "font-sans",
+        roboto.variable,
+        inter.variable,
+        instrumentSerif.variable
+      )}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">

@@ -1,3 +1,4 @@
+import * as React from "react"
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
 
@@ -40,14 +41,53 @@ const buttonVariants = cva(
   }
 )
 
+/**
+ * Minimal Radix-style Slot: merges className/ref/props onto its single child
+ * instead of rendering its own DOM node. Lets Button hand off its element
+ * to whatever child is passed (e.g. next/link's <Link>).
+ */
+const Slot = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
+  ({ children, className, ...props }, ref) => {
+    if (!React.isValidElement(children)) return null
+
+    const child = children as React.ReactElement<any> & {
+      ref?: React.Ref<any>
+    }
+
+    return React.cloneElement(child, {
+      ...props,
+      ...child.props,
+      className: cn(className, child.props?.className),
+      ref: ref
+        ? mergeRefs(ref, (child as any).ref)
+        : (child as any).ref,
+    })
+  }
+)
+Slot.displayName = "Slot"
+
+function mergeRefs<T>(...refs: Array<React.Ref<T> | undefined>) {
+  return (node: T) => {
+    for (const ref of refs) {
+      if (!ref) continue
+      if (typeof ref === "function") ref(node)
+      else (ref as React.MutableRefObject<T | null>).current = node
+    }
+  }
+}
+
 function Button({
   className,
   variant = "default",
   size = "default",
+  asChild = false,
   ...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+}: ButtonPrimitive.Props &
+  VariantProps<typeof buttonVariants> & { asChild?: boolean }) {
+  const Comp: any = asChild ? Slot : ButtonPrimitive
+
   return (
-    <ButtonPrimitive
+    <Comp
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}

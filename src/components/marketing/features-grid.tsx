@@ -38,7 +38,7 @@ function CornerMark({ className }: { className: string }) {
 
 export function FeaturesGrid() {
   return (
-    <section className="border-t border-border bg-background py-24">
+    <section className="bg-background py-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <h2 className="text-4xl font-bold tracking-tight text-foreground">
           Our features

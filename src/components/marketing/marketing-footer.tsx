@@ -66,7 +66,7 @@ export function MarketingFooter() {
 			<div className="bg-foreground/20 absolute top-0 right-1/2 left-1/2 h-px w-1/3 -translate-x-1/2 -translate-y-1/2 rounded-full blur" />
 			<div className="grid w-full gap-8 xl:grid-cols-3 xl:gap-8">
 				<AnimatedContainer className="space-y-4">
-					<Image src="/favicon.ico" alt="Colbe" width={32} height={32} />
+					<Image src="/favicon.ico" alt="Colbe" width={32} height={32} priority />
 					<p className="text-muted-foreground mt-8 text-sm md:mt-0">
 						© {new Date().getFullYear()} Colbe. All rights reserved.
 					</p>
@@ -106,15 +106,12 @@ type ViewAnimationProps = {
 
 function AnimatedContainer({ className, delay = 0.1, children }: ViewAnimationProps) {
 	const shouldReduceMotion = useReducedMotion();
-	if (shouldReduceMotion) {
-		return children;
-	}
 	return (
 		<motion.div
-			initial={{ filter: 'blur(4px)', translateY: -8, opacity: 0 }}
-			whileInView={{ filter: 'blur(0px)', translateY: 0, opacity: 1 }}
+			initial={shouldReduceMotion ? false : { filter: 'blur(4px)', translateY: -8, opacity: 0 }}
+			whileInView={shouldReduceMotion ? undefined : { filter: 'blur(0px)', translateY: 0, opacity: 1 }}
 			viewport={{ once: true }}
-			transition={{ delay, duration: 0.8 }}
+			transition={{ delay, duration: shouldReduceMotion ? 0 : 0.8 }}
 			className={className}
 		>
 			{children}

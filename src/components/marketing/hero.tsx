@@ -21,31 +21,25 @@ export default function Hero() {
       */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-background via-background/95 to-background" />
 
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 pb-20 pt-8">
+      <div className="relative z-10 flex flex-1 flex-col justify-end px-6 pb-20 md:px-12 lg:pb-24">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease }}
-          className="mb-8 flex items-center gap-2"
+          className="flex items-center gap-4"
         >
-          <Image src="/favicon.ico" alt="Colbe" width={40} height={40} />
+          <Image src="/favicon.ico" alt="Colbe" width={48} height={48} priority />
+          <h1 className="font-[family-name:var(--font-instrument-serif)] text-4xl leading-[1] tracking-tight text-foreground md:text-5xl lg:text-[4rem]">
+            Every guild, <em className="italic text-muted-foreground">one</em>{" "}
+            home.
+          </h1>
         </motion.div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1, ease }}
-          className="max-w-[700px] text-center font-[family-name:var(--font-instrument-serif)] text-4xl leading-[1] tracking-tight text-foreground md:text-5xl lg:text-[4rem]"
-        >
-          Every guild, <em className="italic text-muted-foreground">one</em>{" "}
-          home.
-        </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2, ease }}
-          className="mt-6 max-w-[480px] text-center text-base text-muted-foreground md:text-lg"
+          transition={{ duration: 0.5, delay: 0.1, ease }}
+          className="mt-6 max-w-[480px] text-base text-muted-foreground md:text-lg"
         >
           Chat, hang out, and grow with your people.
         </motion.p>
@@ -53,7 +47,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3, ease }}
+          transition={{ duration: 0.5, delay: 0.2, ease }}
           className="mt-8 flex items-center gap-4"
         >
           <Button

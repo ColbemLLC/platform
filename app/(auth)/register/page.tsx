@@ -1,15 +1,10 @@
-"use client";
+import type { Metadata } from "next";
+import { RegisterFlow } from "@/components/auth/register-flow";
 
-import { useState } from "react";
-import { RegisterIntro } from "@/components/auth/register-intro";
-import { RegisterForm } from "@/components/auth/register-form";
+export const metadata: Metadata = {
+  title: "Register",
+};
 
 export default function RegisterPage() {
-  const [step, setStep] = useState<"intro" | "form">("intro");
-
-  if (step === "intro") {
-    return <RegisterIntro onContinue={() => setStep("form")} />;
-  }
-
-  return <RegisterForm />;
+  return <RegisterFlow />;
 }

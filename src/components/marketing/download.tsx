@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react-client";
+import * as motion from "motion/react-client";
 import { WindowsLogo, LinuxLogo, DeviceMobile } from "@phosphor-icons/react";
 
 const platforms = [

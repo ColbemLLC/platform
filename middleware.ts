@@ -5,7 +5,15 @@ const SESSION_COOKIE = "colbe_session";
 const secret = new TextEncoder().encode(process.env.AUTH_SECRET!);
 
 // Routes anyone can hit, logged in or not.
-const PUBLIC_PATHS = ["/", "/login", "/register", "/forgot-password", "/reset-password"];
+const PUBLIC_PATHS = [
+  "/",
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/privacy",
+  "/terms",
+];
 
 // Routes that only make sense once you're already authenticated —
 // redirect logged-in users away from these instead of showing them again.

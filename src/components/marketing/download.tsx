@@ -3,6 +3,8 @@
 import * as motion from "motion/react-client";
 import { WindowsLogo, LinuxLogo, DeviceMobile } from "@phosphor-icons/react";
 
+import Link from "next/link";
+
 const platforms = [
   {
     name: "Windows",
@@ -36,11 +38,14 @@ export function Download() {
   return (
     <section className="relative mx-auto w-full max-w-5xl px-6 py-32">
       <div className="mb-16 text-center">
-        <p className="mb-3 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+        <Link
+          href="/"
+          className="mb-3 inline-block font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground"
+        >
           Download
-        </p>
-        <h1 className="font-serif text-5xl tracking-tight sm:text-6xl">
-          Colbe, on your terms
+        </Link>
+        <h1 className="font-[family-name:var(--font-instrument-serif)] text-6xl leading-[1] tracking-tight text-foreground sm:text-7xl lg:text-[5rem]">
+          Colbe, on <em className="italic text-muted-foreground">your</em> terms
         </h1>
         <p className="mt-4 text-muted-foreground">
           Native apps are on the way. Get notified the moment they land.
@@ -62,7 +67,7 @@ export function Download() {
             <CornerMarks />
             <platform.icon className="h-10 w-10 text-foreground/80" weight="thin" />
             <div>
-              <h3 className="font-serif text-2xl">{platform.name}</h3>
+              <h3 className="font-[family-name:var(--font-instrument-serif)] text-2xl">{platform.name}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{platform.note}</p>
             </div>
             <span className="mt-2 rounded-full border border-border px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">

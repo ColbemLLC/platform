@@ -7,7 +7,6 @@ import { motion } from 'motion/react';
 import {
 	FacebookLogo,
 	InstagramLogo,
-	LinkedinLogo,
 	YoutubeLogo,
 } from '@phosphor-icons/react';
 
@@ -25,9 +24,6 @@ const footerLinks: FooterSection[] = [
 	{
 		label: 'Product',
 		links: [
-			{ title: 'Features', href: '#features' },
-			{ title: 'Pricing', href: '#pricing' },
-			{ title: 'Download', href: '/download' },
 			{ title: 'Status', href: '/status' },
 		],
 	},
@@ -45,7 +41,7 @@ const footerLinks: FooterSection[] = [
 		links: [
 			{ title: 'Blog', href: '/blog' },
 			{ title: 'Changelog', href: '/changelog' },
-			{ title: 'Brand', href: '/brand' },
+			{ title: 'Docs', href: '/documentation' },
 			{ title: 'Help', href: '/help' },
 		],
 	},
@@ -55,7 +51,6 @@ const footerLinks: FooterSection[] = [
 			{ title: 'Facebook', href: '#', icon: FacebookLogo },
 			{ title: 'Instagram', href: '#', icon: InstagramLogo },
 			{ title: 'Youtube', href: '#', icon: YoutubeLogo },
-			{ title: 'LinkedIn', href: '#', icon: LinkedinLogo },
 		],
 	},
 ];

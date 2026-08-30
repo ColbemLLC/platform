@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { jwtVerify } from "jose";
-
-const SESSION_COOKIE = "colbe_session";
-const secret = new TextEncoder().encode(process.env.AUTH_SECRET!);
+import { getSessionCookie } from "better-auth/cookies";
 
 // Routes anyone can hit, logged in or not.
 const PUBLIC_PATHS = [
   "/",
   "/login",
+  "/documentation",
   "/register",
   "/forgot-password",
   "/reset-password",
@@ -19,22 +17,15 @@ const PUBLIC_PATHS = [
 // redirect logged-in users away from these instead of showing them again.
 const AUTH_ONLY_PATHS = ["/login", "/register", "/forgot-password", "/reset-password"];
 
-async function verifySession(token: string | undefined) {
-  if (!token) return null;
-  try {
-    const { payload } = await jwtVerify(token, secret);
-    return payload.sub ?? null;
-  } catch {
-    // expired, tampered, or wrong secret — treat as logged out
-    return null;
-  }
-}
-
-export async function middleware(req: NextRequest) {
+export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const token = req.cookies.get(SESSION_COOKIE)?.value;
-  const userId = await verifySession(token);
-  const isAuthenticated = Boolean(userId);
+
+  // Lightweight check only — confirms a session cookie exists and is
+  // well-formed. Real verification happens server-side per request via
+  // auth.api.getSession(), same as Better Auth's own docs recommend for
+  // edge middleware.
+  const sessionCookie = getSessionCookie(req);
+  const isAuthenticated = Boolean(sessionCookie);
 
   const isPublic =
     PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/documentation/");
@@ -51,10 +42,7 @@ export async function middleware(req: NextRequest) {
   if (!isAuthenticated && !isPublic) {
     const loginUrl = new URL("/login", req.url);
     loginUrl.searchParams.set("next", pathname);
-    const response = NextResponse.redirect(loginUrl);
-    // clear any invalid/expired cookie so it doesn't keep failing verification
-    response.cookies.delete(SESSION_COOKIE);
-    return response;
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
@@ -62,9 +50,6 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Run on everything except static assets, images, and Next internals.
-     */
     "/((?!_next/static|_next/image|favicon.ico|background/|api/).*)",
   ],
 };

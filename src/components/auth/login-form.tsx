@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { authClient } from "@/lib/auth/auth-client";
 
 function CornerMark({ className }: { className: string }) {
   return (
@@ -15,6 +17,7 @@ function CornerMark({ className }: { className: string }) {
 }
 
 export function LoginForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -26,19 +29,17 @@ export function LoginForm() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      const { error: signInError } = await authClient.signIn.email({
+        email,
+        password,
       });
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => null);
-        setError(data?.message ?? "Invalid email or password.");
+      if (signInError) {
+        setError(signInError.message ?? "Invalid email or password.");
         return;
       }
 
-      window.location.href = "/";
+      router.push("/@me");
     } catch {
       setError("Something went wrong. Try again.");
     } finally {

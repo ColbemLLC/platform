@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { authClient } from "@/lib/auth/auth-client";
 
 function CornerMark({ className }: { className: string }) {
   return (
@@ -39,15 +40,18 @@ export function RegisterForm() {
 
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, username, password }),
+      const { error: signUpError } = await authClient.signUp.email({
+        email,
+        password,
+        username,
+        // Better Auth's core user model requires "name" — reuse the
+        // username here since we don't collect a separate display name
+        // at this step (that happens in onboarding's profile-completion).
+        name: username,
       });
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => null);
-        setError(data?.message ?? "Something went wrong. Try again.");
+      if (signUpError) {
+        setError(signUpError.message ?? "Something went wrong. Try again.");
         return;
       }
 

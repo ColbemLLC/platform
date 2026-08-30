@@ -3,7 +3,7 @@ import { getSessionCookie } from "better-auth/cookies";
 
 // Only these need a session. Everything else (marketing, docs, legal,
 // any future page) is public by default — nothing to remember to add.
-const PROTECTED_PREFIXES = ["/onboarding", "/@me"];
+const PROTECTED_PREFIXES = ["/onboarding", "/me"];
 
 // Logged-in users get bounced away from these instead of seeing them again.
 const AUTH_ONLY_PATHS = ["/login", "/register", "/forgot-password", "/reset-password"];
@@ -20,7 +20,7 @@ export function middleware(req: NextRequest) {
   const isAuthOnly = AUTH_ONLY_PATHS.includes(pathname);
 
   if (isAuthenticated && pathname === "/") {
-    return NextResponse.redirect(new URL("/@me", req.url));
+    return NextResponse.redirect(new URL("/me", req.url));
   }
 
   if (isAuthenticated && isAuthOnly) {

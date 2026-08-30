@@ -37,7 +37,7 @@ export function LoginForm() {
         return;
       }
 
-      window.location.href = "/@me";
+      window.location.href = "/me";
     } catch {
       setError("Something went wrong. Try again.");
     } finally {

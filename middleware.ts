@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { jwtVerify } from "jose";
 
 const SESSION_COOKIE = "colbe_session";
+const secret = new TextEncoder().encode(process.env.AUTH_SECRET!);
 
 // Routes anyone can hit, logged in or not.
 const PUBLIC_PATHS = ["/", "/login", "/register", "/forgot-password", "/reset-password"];
@@ -9,14 +11,22 @@ const PUBLIC_PATHS = ["/", "/login", "/register", "/forgot-password", "/reset-pa
 // redirect logged-in users away from these instead of showing them again.
 const AUTH_ONLY_PATHS = ["/login", "/register", "/forgot-password", "/reset-password"];
 
-export function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
-  const session = req.cookies.get(SESSION_COOKIE)?.value;
+async function verifySession(token: string | undefined) {
+  if (!token) return null;
+  try {
+    const { payload } = await jwtVerify(token, secret);
+    return payload.sub ?? null;
+  } catch {
+    // expired, tampered, or wrong secret — treat as logged out
+    return null;
+  }
+}
 
-  // TODO: replace this presence check with real verification
-  // (e.g. jwt.verify(session, process.env.AUTH_SECRET)) once
-  // api/auth/route.ts actually issues signed sessions.
-  const isAuthenticated = Boolean(session);
+export async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+  const token = req.cookies.get(SESSION_COOKIE)?.value;
+  const userId = await verifySession(token);
+  const isAuthenticated = Boolean(userId);
 
   const isPublic = PUBLIC_PATHS.includes(pathname);
   const isAuthOnly = AUTH_ONLY_PATHS.includes(pathname);
@@ -28,7 +38,10 @@ export function middleware(req: NextRequest) {
   if (!isAuthenticated && !isPublic) {
     const loginUrl = new URL("/login", req.url);
     loginUrl.searchParams.set("next", pathname);
-    return NextResponse.redirect(loginUrl);
+    const response = NextResponse.redirect(loginUrl);
+    // clear any invalid/expired cookie so it doesn't keep failing verification
+    response.cookies.delete(SESSION_COOKIE);
+    return response;
   }
 
   return NextResponse.next();

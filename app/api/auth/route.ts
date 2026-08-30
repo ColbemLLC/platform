@@ -1,8 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { eq, or } from "drizzle-orm";
 import bcrypt from "bcryptjs";
+import { SignJWT } from "jose";
 import { db } from "@/lib/db/index.js";
 import { users } from "@/lib/db/schema";
+
+const secret = new TextEncoder().encode(process.env.AUTH_SECRET!);
+
+async function signSession(userId: string) {
+  return new SignJWT({ sub: userId })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("30d")
+    .sign(secret);
+}
 
 /**
  * TODO: wire this up to your real Kafka producer (kafkajs or similar).
@@ -51,17 +62,17 @@ export async function POST(req: NextRequest) {
 
   await publishAuthEvent("user.logged_in", { userId: user.id });
 
-  // TODO: sign a real session token (e.g. jose/jwt with AUTH_SECRET)
-  // instead of a bare user id, then set it as the colbe_session cookie
-  // middleware.ts checks for.
+  const token = await signSession(user.id);
+
   const response = NextResponse.json({
     user: { id: user.id, email: user.email, username: user.username },
   });
-  response.cookies.set("colbe_session", user.id, {
+  response.cookies.set("colbe_session", token, {
     httpOnly: true,
     secure: true,
     sameSite: "lax",
     path: "/",
+    maxAge: 60 * 60 * 24 * 30,
   });
   return response;
 }
@@ -111,12 +122,15 @@ export async function PUT(req: NextRequest) {
     username: user.username,
   });
 
+  const token = await signSession(user.id);
+
   const response = NextResponse.json({ user }, { status: 201 });
-  response.cookies.set("colbe_session", user.id, {
+  response.cookies.set("colbe_session", token, {
     httpOnly: true,
     secure: true,
     sameSite: "lax",
     path: "/",
+    maxAge: 60 * 60 * 24 * 30,
   });
   return response;
 }

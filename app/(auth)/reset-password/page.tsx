@@ -1,7 +1,15 @@
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import { ResetPasswordForm } from "@/components/auth/reset-password-form";
+
+export const metadata: Metadata = {
+  title: "Reset password",
+};
+
 export default function ResetPasswordPage() {
   return (
-    <main>
-      <h1>Reset password</h1>
-    </main>
+    <Suspense fallback={null}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }

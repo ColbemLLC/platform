@@ -42,14 +42,24 @@ export async function POST(req: NextRequest) {
     cost: 12,
   });
 
-  const [user] = await db
-    .insert(users)
-    .values({ email, username, passwordHash })
-    .returning({ id: users.id, email: users.email, username: users.username });
+  // Generated here instead of relying on drizzle's .returning() on insert —
+  // libsql's returning-row objects are frozen and drizzle's column mapping
+  // tries to mutate them, causing "Attempted to assign to readonly property".
+  const userId = crypto.randomUUID();
 
-  const token = await signSession(user.id);
+  await db.insert(users).values({
+    id: userId,
+    email,
+    username,
+    passwordHash,
+  });
 
-  const response = NextResponse.json({ user }, { status: 201 });
+  const token = await signSession(userId);
+
+  const response = NextResponse.json(
+    { user: { id: userId, email, username } },
+    { status: 201 },
+  );
   response.cookies.set("colbe_session", token, {
     httpOnly: true,
     secure: true,

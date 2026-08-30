@@ -4,7 +4,6 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
-import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { signSession } from "@/lib/auth/shared";
@@ -32,7 +31,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const valid = await bcrypt.compare(password, user.passwordHash);
+  const valid = await Bun.password.verify(password, user.passwordHash);
   if (!valid) {
     return NextResponse.json(
       { message: "Invalid email or password." },

@@ -4,7 +4,6 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { eq, or } from "drizzle-orm";
-import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { signSession } from "@/lib/auth/shared";
@@ -38,7 +37,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const passwordHash = await bcrypt.hash(password, 12);
+  const passwordHash = await Bun.password.hash(password, {
+    algorithm: "bcrypt",
+    cost: 12,
+  });
 
   const [user] = await db
     .insert(users)

@@ -8,7 +8,6 @@ const secret = new TextEncoder().encode(process.env.AUTH_SECRET!);
 const PUBLIC_PATHS = [
   "/",
   "/login",
-  "/documentation",
   "/register",
   "/forgot-password",
   "/reset-password",
@@ -37,7 +36,8 @@ export async function middleware(req: NextRequest) {
   const userId = await verifySession(token);
   const isAuthenticated = Boolean(userId);
 
-  const isPublic = PUBLIC_PATHS.includes(pathname);
+  const isPublic =
+    PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/documentation/");
   const isAuthOnly = AUTH_ONLY_PATHS.includes(pathname);
 
   if (isAuthenticated && isAuthOnly) {

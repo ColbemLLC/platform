@@ -10,6 +10,9 @@ export const auth = betterAuth({
     "http://localhost:3000",
     "http://192.168.8.3:3000",
   ],
+  advanced: {
+    useSecureCookies: false,
+  },
   database: drizzleAdapter(db, {
     provider: "sqlite",
     schema,

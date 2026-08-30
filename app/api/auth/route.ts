@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { randomUUID } from "crypto";
+import { eq, or } from "drizzle-orm";
+import bcrypt from "bcryptjs";
+import { db } from "@/lib/db/index.js";
+import { users } from "@/lib/db/schema";
 
 /**
  * TODO: wire this up to your real Kafka producer (kafkajs or similar).
@@ -25,9 +28,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // TODO: look up user by email in your DB, verify password hash (bcrypt.compare).
-  // Placeholder rejects everything until wired to a real datastore.
-  const user = null as null | { id: string; email: string };
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1);
 
   if (!user) {
     return NextResponse.json(
@@ -36,10 +41,29 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const valid = await bcrypt.compare(password, user.passwordHash);
+  if (!valid) {
+    return NextResponse.json(
+      { message: "Invalid email or password." },
+      { status: 401 },
+    );
+  }
+
   await publishAuthEvent("user.logged_in", { userId: user.id });
 
-  // TODO: issue a session (cookie / JWT) here — this is the "unbypassable" part.
-  return NextResponse.json({ user });
+  // TODO: sign a real session token (e.g. jose/jwt with AUTH_SECRET)
+  // instead of a bare user id, then set it as the colbe_session cookie
+  // middleware.ts checks for.
+  const response = NextResponse.json({
+    user: { id: user.id, email: user.email, username: user.username },
+  });
+  response.cookies.set("colbe_session", user.id, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+  });
+  return response;
 }
 
 /**
@@ -61,18 +85,38 @@ export async function PUT(req: NextRequest) {
     );
   }
 
-  // TODO: check email/username uniqueness against your DB before creating.
-  // TODO: hash password with bcrypt before storing — never store plaintext.
+  const [existing] = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(or(eq(users.email, email), eq(users.username, username)))
+    .limit(1);
 
-  const userId = randomUUID();
+  if (existing) {
+    return NextResponse.json(
+      { message: "An account with that email or username already exists." },
+      { status: 409 },
+    );
+  }
 
-  // TODO: persist { id: userId, email, username, passwordHash } to your DB.
+  const passwordHash = await bcrypt.hash(password, 12);
 
-  await publishAuthEvent("user.registered", { userId, email, username });
+  const [user] = await db
+    .insert(users)
+    .values({ email, username, passwordHash })
+    .returning({ id: users.id, email: users.email, username: users.username });
 
-  // TODO: issue a session (cookie / JWT) here, same as login.
-  return NextResponse.json(
-    { user: { id: userId, email, username } },
-    { status: 201 },
-  );
+  await publishAuthEvent("user.registered", {
+    userId: user.id,
+    email: user.email,
+    username: user.username,
+  });
+
+  const response = NextResponse.json({ user }, { status: 201 });
+  response.cookies.set("colbe_session", user.id, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+  });
+  return response;
 }

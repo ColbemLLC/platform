@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
-import { db } from "@/lib/db/index.js";
+import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { verifySession } from "@/lib/auth/shared";
 

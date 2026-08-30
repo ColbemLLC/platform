@@ -33,7 +33,7 @@ export function OnboardingFlow() {
         return;
       }
 
-      router.push("/");
+      router.push("/@me");
     } catch {
       setError("Something went wrong. Try again.");
     } finally {

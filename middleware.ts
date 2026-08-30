@@ -40,6 +40,10 @@ export async function middleware(req: NextRequest) {
     PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/documentation/");
   const isAuthOnly = AUTH_ONLY_PATHS.includes(pathname);
 
+  if (isAuthenticated && pathname === "/") {
+    return NextResponse.redirect(new URL("/@me", req.url));
+  }
+
   if (isAuthenticated && isAuthOnly) {
     return NextResponse.redirect(new URL("/", req.url));
   }

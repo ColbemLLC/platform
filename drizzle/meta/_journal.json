@@ -15,6 +15,13 @@
       "when": 1788105891037,
       "tag": "0001_nostalgic_tiger_shark",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1788106560843,
+      "tag": "0002_flippant_darkstar",
+      "breakpoints": true
     }
   ]
 }

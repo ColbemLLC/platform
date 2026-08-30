@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,6 @@ function CornerMark({ className }: { className: string }) {
 }
 
 export function LoginForm() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +37,7 @@ export function LoginForm() {
         return;
       }
 
-      router.push("/@me");
+      window.location.href = "/@me";
     } catch {
       setError("Something went wrong. Try again.");
     } finally {

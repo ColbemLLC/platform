@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,6 @@ function CornerMark({ className }: { className: string }) {
 }
 
 export function RegisterForm() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -55,7 +53,7 @@ export function RegisterForm() {
         return;
       }
 
-      router.push("/onboarding");
+      window.location.href = "/onboarding";
     } catch {
       setError("Something went wrong. Try again.");
     } finally {

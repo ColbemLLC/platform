@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { House, Trophy, Star, ChatCircleDots, At, Gear, DotsThree } from "@phosphor-icons/react";
+import { House, Trophy, Star, ChatCircleDots, Plus, At, Gear, DotsThree } from "@phosphor-icons/react";
 import { Profile } from "@/components/app/shared/profile";
 import { authClient } from "@/lib/auth/auth-client";
 
@@ -34,6 +34,19 @@ export function BottomBar() {
           className="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted"
         >
           <ChatCircleDots className="h-5 w-5" />
+        </button>
+
+        <div className="mx-1 h-6 w-px bg-border" />
+
+        {/* Pinned guilds render here */}
+        <div className="flex items-center gap-1 overflow-x-auto" />
+
+        <button
+          type="button"
+          className="flex h-10 w-10 items-center justify-center rounded-lg border border-dashed border-border text-muted-foreground hover:border-primary hover:text-primary"
+          aria-label="Add guild"
+        >
+          <Plus className="h-4 w-4" />
         </button>
       </div>
 

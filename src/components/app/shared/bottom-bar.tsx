@@ -17,12 +17,12 @@ export function BottomBar() {
         >
           <House weight="fill" className="h-5 w-5" />
         </Link>
-        <button
-          type="button"
+        <Link
+          href="/badges"
           className="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted"
         >
           <Trophy className="h-5 w-5" />
-        </button>
+        </Link>
         <button
           type="button"
           className="flex h-10 w-10 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted"

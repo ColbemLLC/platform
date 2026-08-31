@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { House, Trophy, Star, ChatCircleDots, At, Gear, DotsThree } from "@phosphor-icons/react";
 import { Profile } from "@/components/app/shared/profile";
-import { authClient } from "@/lib/auth/client";
+import { authClient } from "@/lib/auth/auth-client";
 
 export function BottomBar() {
   const { data: session } = authClient.useSession();

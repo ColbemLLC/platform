@@ -15,9 +15,11 @@ export function AppBar() {
   const Icon = meta.icon;
 
   return (
-    <header className="flex h-12 shrink-0 items-center gap-2 border-b border-border bg-background px-4">
-      <Icon className="h-5 w-5 text-muted-foreground" />
-      <span className="text-sm font-semibold text-foreground">{meta.label}</span>
+    <header className="relative flex h-12 shrink-0 items-center justify-center border-b border-border bg-background px-4">
+      <div className="flex items-center gap-2">
+        <Icon className="h-5 w-5 text-muted-foreground" />
+        <span className="text-sm font-semibold text-foreground">{meta.label}</span>
+      </div>
     </header>
   );
 }

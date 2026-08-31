@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Plus } from "@phosphor-icons/react";
 
 export function NavRail() {
   return (
@@ -18,14 +17,6 @@ export function NavRail() {
 
       {/* Guild list renders here */}
       <div className="flex flex-1 flex-col items-center gap-2 overflow-y-auto" />
-
-      <button
-        type="button"
-        className="flex h-12 w-12 items-center justify-center rounded-2xl border border-dashed border-border text-muted-foreground transition-colors hover:rounded-xl hover:border-primary hover:text-primary"
-        aria-label="Add guild"
-      >
-        <Plus className="h-5 w-5" />
-      </button>
     </nav>
   );
 }

@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { House, Trophy, Star, ChatCircleDots, Plus, At, Gear, DotsThree } from "@phosphor-icons/react";
+import { House, Trophy, Star, ChatCircleDots, At, Gear, DotsThree } from "@phosphor-icons/react";
 import { Profile } from "@/components/app/shared/profile";
+import { authClient } from "@/lib/auth/client";
 
 export function BottomBar() {
+  const { data: session } = authClient.useSession();
+  const displayName = session?.user.username ?? session?.user.name;
   return (
     <div className="flex h-14 w-full shrink-0 items-center justify-between border-t border-border bg-background px-3">
       <div className="flex items-center gap-1">
@@ -34,8 +37,13 @@ export function BottomBar() {
         </button>
       </div>
 
-      <div className="flex items-center gap-1">
-        <Profile />
+      <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2">
+          <Profile avatarUrl={session?.user.image} status="online" />
+          {displayName && (
+            <span className="text-sm font-medium text-foreground">{displayName}</span>
+          )}
+        </div>
 
         <button
           type="button"

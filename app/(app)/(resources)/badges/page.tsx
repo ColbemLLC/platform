@@ -57,17 +57,18 @@ export default function BadgesPage() {
               {badges.map((badge) => (
                 <div
                   key={badge.name}
-                  className="flex items-stretch overflow-hidden rounded-xl border border-border bg-card"
+                  className="flex items-start gap-5 rounded-xl bg-card p-5"
                 >
-                  <div className="w-1.5 shrink-0 bg-blue-500" />
-                  <div className="flex flex-1 items-start gap-4 p-4">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-muted text-foreground">
-                      <badge.icon className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-foreground">{badge.name}</p>
-                      <p className="mt-1 text-sm text-muted-foreground">{badge.description}</p>
-                    </div>
+                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-muted text-foreground">
+                    <badge.icon className="h-8 w-8" />
+                  </div>
+                  <div>
+                    <p className="font-[family-name:var(--font-instrument-serif)] text-xl text-foreground">
+                      {badge.name}
+                    </p>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                      {badge.description}
+                    </p>
                   </div>
                 </div>
               ))}

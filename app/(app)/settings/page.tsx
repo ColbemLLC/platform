@@ -8,13 +8,7 @@ import {
   YoutubeLogo,
   Globe,
 } from "@phosphor-icons/react/dist/ssr";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select } from "@/components/ui/select";
 
 const LANGUAGES = ["English", "Spanish", "French", "Portuguese", "Setswana", "German"];
 
@@ -102,17 +96,12 @@ export default function SettingsPage() {
             />
           </Field>
           <Field label="Language">
-            <Select value={language} onValueChange={setLanguage}>
-              <SelectTrigger className={inputClass}>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {LANGUAGES.map((l) => (
-                  <SelectItem key={l} value={l}>
-                    {l}
-                  </SelectItem>
-                ))}
-              </SelectContent>
+            <Select value={language} onChange={(e) => setLanguage(e.target.value)}>
+              {LANGUAGES.map((l) => (
+                <option key={l} value={l}>
+                  {l}
+                </option>
+              ))}
             </Select>
           </Field>
         </div>

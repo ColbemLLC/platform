@@ -28,7 +28,7 @@ export default function SettingsPage() {
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
-  const [displayName, setDisplayName] = useState(user?.name ?? "");
+  const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
   const [location, setLocation] = useState("");
   const [language, setLanguage] = useState("English");
@@ -37,6 +37,10 @@ export default function SettingsPage() {
   const [youtube, setYoutube] = useState("");
   const [website, setWebsite] = useState("");
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (session?.user.name) setDisplayName(session.user.name);
+  }, [session?.user.name]);
 
   useEffect(() => {
     // Auto-detect location from the user's network (IP-based, no permission prompt).

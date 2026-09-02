@@ -108,36 +108,39 @@ export default function SessionsPage() {
           return (
             <div
               key={session.id}
-              className="relative flex items-center justify-between rounded-[15px] border border-border bg-muted/20 py-4 pl-5 pr-4"
+              className="relative overflow-hidden rounded-[15px] border border-border bg-muted/20"
             >
-              <span className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full bg-primary" />
+              <span className="absolute inset-x-0 top-0 h-[3px] rounded-t-[15px] bg-primary" />
 
-              <div className="flex items-center gap-3">
-                <Icon className="h-5 w-5 text-muted-foreground" />
-                <div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium text-foreground">{label}</p>
-                    {isCurrent && (
-                      <span className="rounded-full bg-primary/15 px-2 py-0.5 text-xs font-medium text-primary">
-                        Current session
-                      </span>
-                    )}
+              <div className="flex items-center justify-between py-4 pl-5 pr-4 pt-[18px]">
+                <div className="flex items-center gap-3">
+                  <Icon className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-medium text-foreground">{label}</p>
+                      {isCurrent && (
+                        <span className="rounded-full bg-primary/15 px-2 py-0.5 text-xs font-medium text-primary">
+                          Current session
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      {session.ipAddress ?? "Unknown IP"} ·{" "}
+                      {isCurrent ? "Active now" : `Active ${formatRelative(session.updatedAt)}`}
+                    </p>
                   </div>
-                  <p className="mt-0.5 text-xs text-muted-foreground">
-                    {session.ipAddress ?? "Unknown IP"} · Active {formatRelative(session.updatedAt)}
-                  </p>
                 </div>
-              </div>
 
-              {!isCurrent && (
-                <button
-                  onClick={() => revoke(session.token)}
-                  disabled={revoking === session.token}
-                  className="rounded-[15px] px-3 py-1.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-50"
-                >
-                  {revoking === session.token ? "Revoking…" : "Revoke"}
-                </button>
-              )}
+                {!isCurrent && (
+                  <button
+                    onClick={() => revoke(session.token)}
+                    disabled={revoking === session.token}
+                    className="rounded-[15px] px-3 py-1.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-50"
+                  >
+                    {revoking === session.token ? "Revoking…" : "Revoke"}
+                  </button>
+                )}
+              </div>
             </div>
           );
         })}

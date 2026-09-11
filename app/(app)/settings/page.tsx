@@ -12,23 +12,32 @@ import { Select } from "@/components/ui/select";
 
 const LANGUAGES = ["English", "Spanish", "French", "Portuguese", "Setswana", "German"];
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+const inputClass =
+  "w-full rounded-[15px] border border-border bg-muted/20 px-3 py-2 text-sm text-foreground outline-none focus:border-primary";
+
+function Row({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div>
-      <label className="mb-1.5 block text-sm font-medium text-foreground">{label}</label>
-      {children}
+    <div className="flex items-start justify-between gap-8 border-b border-border py-6">
+      <div className="w-48 shrink-0">
+        <p className="text-sm font-medium text-foreground">{label}</p>
+        {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
+      </div>
+      <div className="flex-1">{children}</div>
     </div>
   );
 }
 
-const inputClass =
-  "w-full rounded-[15px] border border-border bg-muted/20 px-3 py-2 text-sm text-foreground outline-none focus:border-primary";
-
 export default function SettingsPage() {
   const { data: session } = authClient.useSession();
-  const user = session?.user;
 
-  const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
   const [location, setLocation] = useState("");
   const [language, setLanguage] = useState("English");
@@ -37,10 +46,6 @@ export default function SettingsPage() {
   const [youtube, setYoutube] = useState("");
   const [website, setWebsite] = useState("");
   const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    if (session?.user.name) setDisplayName(session.user.name);
-  }, [session?.user.name]);
 
   useEffect(() => {
     // Auto-detect location from the user's network (IP-based, no permission prompt).
@@ -58,7 +63,7 @@ export default function SettingsPage() {
 
   async function handleSave() {
     setSaving(true);
-    await authClient.updateUser({ name: displayName });
+    await authClient.updateUser({ username });
     setSaving(false);
   }
 
@@ -71,47 +76,36 @@ export default function SettingsPage() {
         Manage your account details.
       </p>
 
-      <div className="mt-8 flex flex-col gap-6">
-        <div className="grid grid-cols-2 gap-4">
-          <Field label="Display Name">
-            <input
-              className={inputClass}
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-            />
-          </Field>
-          <Field label="Username">
-            <input
-              className={inputClass}
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="username"
-            />
-          </Field>
-        </div>
+      <div className="mt-8">
+        <Row label="Username" hint="You can change it later">
+          <input
+            className={inputClass}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="username"
+          />
+        </Row>
 
-        <div className="grid grid-cols-2 gap-4">
-          <Field label="Location">
-            <input
-              className={inputClass}
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder="City, Country"
-            />
-          </Field>
-          <Field label="Language">
-            <Select value={language} onChange={(e) => setLanguage(e.target.value)}>
-              {LANGUAGES.map((l) => (
-                <option key={l} value={l}>
-                  {l}
-                </option>
-              ))}
-            </Select>
-          </Field>
-        </div>
+        <Row label="Location">
+          <input
+            className={inputClass}
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="City, Country"
+          />
+        </Row>
 
-        <div>
-          <p className="mb-2 text-sm font-medium text-foreground">Social Networks</p>
+        <Row label="Language">
+          <Select value={language} onChange={(e) => setLanguage(e.target.value)}>
+            {LANGUAGES.map((l) => (
+              <option key={l} value={l}>
+                {l}
+              </option>
+            ))}
+          </Select>
+        </Row>
+
+        <Row label="Social Networks">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <XLogo className="h-4 w-4 shrink-0 text-muted-foreground" />
@@ -150,17 +144,17 @@ export default function SettingsPage() {
               />
             </div>
           </div>
-        </div>
+        </Row>
+      </div>
 
-        <div>
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="rounded-[15px] bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
-          >
-            {saving ? "Saving…" : "Save changes"}
-          </button>
-        </div>
+      <div className="mt-6">
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="rounded-[15px] bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
+        >
+          {saving ? "Saving…" : "Save changes"}
+        </button>
       </div>
     </div>
   );

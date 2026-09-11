@@ -12,7 +12,6 @@ import {
   Link as LinkIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { authClient } from "@/lib/auth/auth-client";
-
 const items = [
   { href: "/settings", label: "My Account", icon: User },
   { href: "/settings/profile", label: "Profile", icon: IdentificationBadge },
@@ -32,13 +31,17 @@ export function SettingsNav() {
     <div className="w-full bg-background px-8 pt-8">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="font-serif text-3xl text-foreground">Settings</h1>
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted text-sm font-medium text-foreground ring-1 ring-border">
+        <Link
+          href="/me"
+          aria-label="Close settings"
+          className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted text-sm font-medium text-foreground ring-1 ring-border transition-opacity hover:opacity-80"
+        >
           {user?.image ? (
             <img src={user.image} alt={user.name} className="h-full w-full object-cover" />
           ) : (
             user?.name?.[0]?.toUpperCase() ?? "?"
           )}
-        </div>
+        </Link>
       </div>
 
       <nav className="flex items-center gap-6 border-b border-border">
